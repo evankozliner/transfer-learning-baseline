@@ -1,5 +1,11 @@
 # transfer-learning-baseline
 
+### Requirements
+1. Threshold Fusion
+2. Tensorflow
+3. Docker
+4. The trained model 
+
 # from the image_retrain dir
 ```bash
 python tensorflow/tensorflow/examples/image_retraining/retrain.py \
