@@ -1,10 +1,16 @@
 # transfer-learning-baseline
 
 ### Requirements
+
 1. Threshold Fusion
 2. Tensorflow
 3. Docker
 4. The trained model 
+
+# Before using threshold fusion, remember to...
+
+1. Remove the mex.h header (no matlab on this run)
+2. Compile it! `gcc -O3 -o threshold_fusion threshold_fusion.c -lfourier -lm`
 
 # from the image_retrain dir
 ```bash
@@ -22,5 +28,6 @@ python tensorflow/tensorflow/examples/image_retraining/retrain.py \
 ```bash
 docker run -it -v $HOME/Documents/research/image-retrain-with-validation/64x64_blocks:/64x64_blocks gcr.io/tensorflow/tensorflow:latest-devel
 ```
+
 
 
