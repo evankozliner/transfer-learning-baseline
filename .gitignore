@@ -1,0 +1,4 @@
+tensorflow/*
+64x64_blocks/*
+*.pyc
+retrained_graph_64x64.pb
