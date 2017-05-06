@@ -31,7 +31,7 @@ def main(img, ext):
 
     block_file_paths = save_blocks(blocks_past_threshold)
 
-    most_common = vote_on_blocks(block_file_paths)
+    most_common = load_model_and_vote(block_file_paths)
 
     remove_temp_files(block_file_paths, img, ext)
 
@@ -101,10 +101,9 @@ def get_block_by_coordinates(x, y, img):
             BLOCK_SIZE*x:BLOCK_SIZE*(x+1), 
             BLOCK_SIZE*y:BLOCK_SIZE*(y+1)]
 
-def vote_on_blocks(block_paths):
+def load_model_and_vote(block_paths):
     """ Return the class of the given image blocks (numpy array) and the count of votes
         for the array"""
-    votes = []
     image_data = []
     label_lines = [line.rstrip() for line 
                    in tf.gfile.GFile("retrained_labels.txt")]
@@ -113,26 +112,26 @@ def vote_on_blocks(block_paths):
         block_data = tf.gfile.FastGFile(path, 'rb').read()
         image_data.append(block_data)
 
+    load_model()
+
+    with tf.Session() as sess:
+        return vote_on_data(sess, image_data, label_lines)
+
+def load_model():
     # TODO be sure retrained_graph name is consistant w/ block size
     with tf.gfile.FastGFile("retrained_graph_64x64.pb", 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
 
-    with tf.Session() as sess:
-        for block_data in image_data:
-            softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-            predictions = list(sess.run(softmax_tensor,
-                    {'DecodeJpeg/contents:0': block_data})[0])
-            top_prediction = predictions.index(max(predictions))
-            votes.append(label_lines[top_prediction])
-            #top_k = predictions.argsort()[-len(predictions):][::-1]
-
-            #for node_id in top_k:
-            #    human_string = label_lines[node_id]
-            #    score = predictions[node_id]
-                #print('%s (score = %.5f)' % (human_string, score))
-    print votes
+def vote_on_data(sess, image_data, label_lines):
+    votes = []
+    for block_data in image_data:
+        softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
+        predictions = list(sess.run(softmax_tensor,
+                {'DecodeJpeg/contents:0': block_data})[0])
+        top_prediction = predictions.index(max(predictions))
+        votes.append(label_lines[top_prediction])
 
     return Counter(votes).most_common(1)
     
