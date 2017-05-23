@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 WHOLE_IMG_DIR = "data_whole/"
-BLOCK_SIZE = 128
+BLOCK_SIZE = 256
 OUTPUT_DIR = "data_{0}x{0}/".format(str(BLOCK_SIZE))
 EXT = '.jpg'
 

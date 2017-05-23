@@ -17,7 +17,7 @@ THRESHOLD = .7
 INTER_DIR = "inter_dir"
 INTERMEDIATE_DIR_FORMAT = INTER_DIR + "/{0}.jpg"
 
-def main(img, ext):
+def classify(img, ext):
     """ Takes in an image of a lesion and its extension and responds 
         with a classification for that image done by classification on 
         that lesion's blocks as well as the percentage that classification
@@ -26,6 +26,9 @@ def main(img, ext):
         because I was not sure how to get the necessary string based JPEG 
         format without first saving them as JPEGs. 
     """
+
+    img = img.lower()
+    ext = ext.lower()
     
     blocks_past_threshold = get_blocks_past_threshold(img,ext, BLOCK_SIZE)
 
@@ -35,8 +38,9 @@ def main(img, ext):
 
     remove_temp_files(block_file_paths, img, ext)
     
-    print blocks_past_threshold.shape[0]
-    print most_common[0], most_common[1] / blocks_past_threshold.shape[0]
+    #print blocks_past_threshold.shape[0]
+    #print most_common[0], most_common[1] / blocks_past_threshold.shape[0]
+    return most_common[0], most_common[1] / blocks_past_threshold.shape[0]
 
 def save_blocks(block_data, folder, build_folder=True, name=''):
     if build_folder: os.mkdir(folder)
@@ -46,8 +50,8 @@ def save_blocks(block_data, folder, build_folder=True, name=''):
             path = INTERMEDIATE_DIR_FORMAT.format(str(block_idx))
         else:
             path = folder + name + str(block_idx)  + '.jpg'
-        print path
-        print block_data[block_idx].shape
+        #print path
+        #print block_data[block_idx].shape
         scipy.misc.imsave(path, block_data[block_idx])
         paths.append(path)
     return paths
@@ -119,7 +123,7 @@ def load_model_and_vote(block_paths):
         block_data = tf.gfile.FastGFile(path, 'rb').read()
         image_data.append(block_data)
 
-    load_model()
+    #load_model()
 
     with tf.Session() as sess:
         return vote_on_data(sess, image_data, label_lines)
@@ -145,6 +149,7 @@ def vote_on_data(sess, image_data, label_lines):
     return Counter(votes).most_common(1)
     
 if __name__ == "__main__":
-    img = 'Acl221'
+    load_model()
+    img = 'ndl078'
     ext = ".jpg"
-    main(img, ext)
+    classify(img, ext)
