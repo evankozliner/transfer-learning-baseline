@@ -1,0 +1,7 @@
+{
+	"instance-name": "transfer-learn",
+	"region": "us-west-2",
+	"access-environment-var": "AWS_ACCESS_KEY_ID",
+	"secret-environment-var":"AWS_SECRET_ACCESS_KEY",
+	"ec2-user": "evan"
+}
