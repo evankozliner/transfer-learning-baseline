@@ -38,6 +38,8 @@ Zip the images
 ``
 
 Move the images to the git directory
+`mv zipped-images.zip transfer-learning-baseline`
+`unzip zipped-images.zip`
 
 4. **Start tmux**
 
