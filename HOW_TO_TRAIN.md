@@ -1,4 +1,6 @@
-1. Start instance
+# How to Get Transfer Learning Results
+
+1. **Start instance**
 
 
 ```bash
@@ -6,40 +8,44 @@
   python aws_tool.py start
 ```
 
-This will spit out an ip, copy that IP. If you don't copy it correctly you can always run: ``` python aw_tool.py ip ``` to get the IP.
+This will spit out an ip, copy that IP. If you don't copy it correctly you can always run: ` python aw_tool.py ip ` to get the IP.
 
 
-2. Crop the images locally
+2. **Crop the images locally**
 
 
 You will need to edit the cropping file with the appropriate block size
 This will create a directory name data_blocksizexblock_size
 
-``` python image_cropper ```
+``` 
+python image_cropper 
+```
 
-3. Copy the images over to the remote server
+3. **Copy the images over to the remote server**
 
 I will give you the key to copy to the instance 
 
 Zip the images
 
-``` zip -r imgs.zip folder-created-by-crop-script```
+` zip -r imgs.zip folder-created-by-crop-script`
 
-``` scp -i ~/your-key-path/key-i-gave-you.pem zipped-folder  ubuntu@ip-you-copied:~```
+` scp -i ~/your-key-path/key-i-gave-you.pem zipped-folder  ubuntu@ip-you-copied:~`
 
-3. SSH into the instance & unzip images
+4. **SSH into the instance & unzip images**
 
-``` sudo ssh -i ~/your-key-path/key-i-gave-you.pem ubuntu@ip-you-copied ```
+` sudo ssh -i ~/your-key-path/key-i-gave-you.pem ubuntu@ip-you-copied `
+
+``
 
 Move the images to the git directory
 
-``` unzi
+4. **Start tmux**
 
-4. Start tmux
+```bash 
+tmux 
+```
 
-``` tmux ```
-
-5. Run Docker
+5. **Run Docker**
 
 ```bash 
 docker run -it -v $HOME/images-retrain-with-validation/:/image-retrain-with-validation gcr.io/tensorflow/tensorflow:latest-devel 
@@ -59,7 +65,7 @@ python tensorflow/examples/image_retraining/retrain.py \
 
 At this point you can exit tmux with ctrl+b+d, then exit the server. Come back in a number of hours and it should be ready...
 
-6. Get the test accuracy
+6. **Get the test accuracy**
 
 First you will need to reattach to tmux and be sure it is done training:
 
