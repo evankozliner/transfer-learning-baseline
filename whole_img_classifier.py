@@ -16,6 +16,7 @@ BLOCK_SIZE = 64
 THRESHOLD = .7
 INTER_DIR = "inter_dir"
 INTERMEDIATE_DIR_FORMAT = INTER_DIR + "/{0}.jpg"
+GRAPH_FILENAME = "retrained_graph_64x64.pb"
 
 def classify(img, ext):
     """ Takes in an image of a lesion and its extension and responds 
@@ -131,7 +132,7 @@ def load_model_and_vote(block_paths):
 def load_model():
     """ Loads the appriopriate graph as the default graph """
     # TODO be sure retrained_graph name is consistant w/ block size
-    with tf.gfile.FastGFile("retrained_graph_64x64.pb", 'rb') as f:
+    with tf.gfile.FastGFile(GRAPH_FILENAME, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
