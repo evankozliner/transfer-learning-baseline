@@ -64,7 +64,7 @@ python tensorflow/examples/image_retraining/retrain.py \
 --output_labels=/retrained_labels.txt \
 --image_dir /data \
 --summaries_dir /summaries \
---testing_percentage 0 \
+--testing_percentage 5 \
 --validation_percentage 15 \
 --print_misclassified_test_images \
 --random_crop 5 \
