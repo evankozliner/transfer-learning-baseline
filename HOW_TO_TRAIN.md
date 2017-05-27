@@ -50,19 +50,27 @@ tmux
 5. **Run Docker**
 
 ```bash 
-docker run -it -v $HOME/images-retrain-with-validation/:/image-retrain-with-validation gcr.io/tensorflow/tensorflow:latest-devel 
+docker run -it -v $HOME/directory-with-images-in-classes/:/data gcr.io/tensorflow/tensorflow:latest-devel 
 
 # In docker
 cd /tensorflow
 
-python tensorflow/examples/image_retraining/retrain.py \
---bottleneck_dir=/image-retrain-with-validation/bottlenecks \
---how_many_training_steps 500 \
---model_dir=/image-retrain-with-validation/inception \
---output_graph=/image-retrain-with-validation/retrained_graph.pb \
---output_labels=/image-retrain-with-validation/retrained_labels.txt \
---image_dir /image-retrain-with-validation/your-generated-folder-of-cropped-images
 
+python tensorflow/examples/image_retraining/retrain.py \
+--bottleneck_dir=/bottlenecks \
+--how_many_training_steps 500 \
+--model_dir=/inception \
+--output_graph=/retrained_graph.pb \
+--output_labels=/retrained_labels.txt \
+--image_dir /data \
+--summaries_dir /summaries \
+--testing_percentage 0 \
+--validation_percentage 15 \
+--print_misclassified_test_images \
+--random_crop 5 \
+--random_scale 5 \
+--random_brightness 5 \
+--flip_left_right
 ```
 
 At this point you can exit tmux with ctrl+b+d, then exit the server. Come back in a number of hours and it should be ready...
