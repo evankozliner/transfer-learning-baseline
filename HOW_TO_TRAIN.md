@@ -87,7 +87,7 @@ Rename the graph some appriopriate:
 
 Copy the learned graph to the server 
 
-``` sudo docker cp $(docker ps -alq):/path-to-retrained_graph.pb ```
+``` sudo docker cp $(docker ps -alq):/path-to-retrained_graph.pb .```
 
 Edit `whole_img_classifier.py` with the name of the retrained graph (called GRAPH_FILENAME)
 
