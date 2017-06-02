@@ -4,8 +4,8 @@ import os
 import pandas as pd
 
 # TODO Try held out test dir
-WHOLE_IMG_DIR = "data_whole/"
-GROUND_TRUTH = "ground_truth_whole.csv"
+WHOLE_IMG_DIR = "test-whole-imgs/"
+GROUND_TRUTH = "test.csv"
 
 def main():
     total_correct = 0
