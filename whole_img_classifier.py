@@ -33,15 +33,17 @@ def classify(img, ext):
     
     blocks_past_threshold = get_blocks_past_threshold(img,ext, BLOCK_SIZE)
 
+    num_blocks = blocks_past_threshold.shape[0]
+
     block_file_paths = save_blocks(blocks_past_threshold, INTER_DIR)
 
     most_common = load_model_and_vote(block_file_paths)[0]
 
     remove_temp_files(block_file_paths, img, ext)
     
-    #print blocks_past_threshold.shape[0]
-    #print most_common[0], most_common[1] / blocks_past_threshold.shape[0]
-    return most_common[0], most_common[1] / blocks_past_threshold.shape[0]
+    if num_blocks == 0: 
+        num_blocks = 1
+    return most_common[0], most_common[1] / num_blocks 
 
 def save_blocks(block_data, folder, build_folder=True, name=''):
     if build_folder: os.mkdir(folder)
@@ -138,6 +140,9 @@ def load_model():
         _ = tf.import_graph_def(graph_def, name='')
 
 def vote_on_data(sess, image_data, label_lines):
+    if image_data == []:
+        return [(0, 1)]
+
     votes = []
     for block_data in image_data:
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
