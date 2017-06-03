@@ -68,6 +68,7 @@ def remove_temp_files(paths, img, ext):
     os.remove(nonbinary_threshold_img)
     os.remove(thresholded_img_name)
 
+# TODO add test to check if blocks have already been generated
 def get_blocks_past_threshold(img, ext, block_size):
     # Assuming precompiled threshold_fusion
     # Run threshold fusion on raw image
@@ -98,9 +99,12 @@ def get_blocks_past_threshold(img, ext, block_size):
 
     for x in range(x_steps):
         for y in range(y_steps):
-            image_blocks[y + x * x_steps] = \
+            block_idx = y + x * x_steps
+            if block_idx >= len(image_blocks):
+                continue
+            image_blocks[block_idx] = \
                     get_block_by_coordinates(x,y, threshold_img, block_size)
-            image_blocks_orig[y + x * x_steps] = \
+            image_blocks_orig[block_idx] = \
                     get_block_by_coordinates(x,y, original_img, block_size)
     
     #Filter blocks to have > 70% lesion
@@ -111,6 +115,9 @@ def get_blocks_past_threshold(img, ext, block_size):
     return image_blocks_orig[filter(threshold_filter, range(image_blocks.shape[0]))]
 
 def get_block_by_coordinates(x, y, img, block_size):
+    #print img.shape
+    #print block_size*(x+1)
+    #print block_size*(y+1)
     return img[
             block_size*x:block_size*(x+1), 
             block_size*y:block_size*(y+1)]
@@ -156,6 +163,6 @@ def vote_on_data(sess, image_data, label_lines):
     
 if __name__ == "__main__":
     load_model()
-    img = 'ndl078'
+    img = 'isic_0000262'
     ext = ".jpg"
     classify(img, ext)
