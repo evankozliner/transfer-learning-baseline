@@ -22,10 +22,14 @@ def main():
     test_ben = benign.sample(test_ben_count)
 
     test_set = pd.concat([test_mal, test_ben])
+
     train_set = gt.drop(test_set.index)
 
     test_set.to_csv("test.csv")
     train_set.to_csv("train.csv")
+
+    print test_set
+    return test_set, train_set
     
 
 if __name__ == "__main__":
