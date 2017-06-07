@@ -22,6 +22,8 @@ if __name__ == "__main__":
 
     for i,row in gt.iterrows():
         thresholded_img = run_threshold_fusion(row['image_id'], '.jpg')
+        # We don't need the outlined copy, we only use the black and white
+        os.remove('out_final/' + row['image_id'] + '.bmp')
 
 
 

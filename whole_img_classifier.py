@@ -115,9 +115,6 @@ def get_blocks_past_threshold(img, ext, block_size):
     return image_blocks_orig[filter(threshold_filter, range(image_blocks.shape[0]))]
 
 def get_block_by_coordinates(x, y, img, block_size):
-    #print img.shape
-    #print block_size*(x+1)
-    #print block_size*(y+1)
     return img[
             block_size*x:block_size*(x+1), 
             block_size*y:block_size*(y+1)]
